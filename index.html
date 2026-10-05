@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>چت مخفی 🔒</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <button id="langToggle" class="ibtn">EN</button>
+  </div>
+
+  <h1 data-i18n="appTitle">🔒 چت مخفی</h1>
+  <p class="sub" data-i18n="appSub">گفتگوی خصوصی دو نفره، سرتاسر رمزنگاری‌شده</p>
+
+  <!-- ورود اختیاری با گوگل -->
+  <div class="card" id="googleWrap" hidden>
+    <p class="hint" data-i18n="googlePrompt">ورود اختیاری با گوگل برای نمایش نام شما به طرف مقابل</p>
+    <div id="googleBtn"></div>
+    <div id="googleProfileBadge" class="google-badge" hidden>
+      <img id="googleAvatar" alt="">
+      <span id="googleName"></span>
+      <button id="googleSignOut" class="ibtn">✖</button>
+    </div>
+  </div>
+
+  <!-- صفحه ورود/ساخت -->
+  <div id="joinBox">
+    <div class="card">
+      <div class="tabs">
+        <button class="tab on" id="tCreate" data-i18n="tabCreate">✨ ساخت اتاق</button>
+        <button class="tab" id="tJoin" data-i18n="tabJoin">🚪 ورود به اتاق</button>
+      </div>
+
+      <!-- ساخت اتاق -->
+      <div id="pCreate">
+        <label data-i18n="labelRoomCode">کد اتاق</label>
+        <div class="row">
+          <input id="roomC" class="code" readonly>
+          <button class="ibtn" id="regenRoom" title="🎲">🎲</button>
+          <button class="ibtn" id="copyRoom" title="📋">📋</button>
+        </div>
+        <label data-i18n="labelPin">رمز ۶ رقمی</label>
+        <div class="row">
+          <input id="pinC" class="pin" readonly>
+          <button class="ibtn" id="regenPin" title="🎲">🎲</button>
+          <button class="ibtn" id="copyPin" title="📋">📋</button>
+        </div>
+        <p class="hint" data-i18n="hintCreate">این کد و رمز را برای طرف مقابل بفرست تا وارد همین اتاق شود.</p>
+        <button class="btn" id="createGo" data-i18n="btnStart">شروع چت</button>
+      </div>
+
+      <!-- ورود به اتاق -->
+      <div id="pJoin" hidden>
+        <label data-i18n="labelRoomCode">کد اتاق</label>
+        <input id="roomJ" class="code" maxlength="32" data-i18n-placeholder="placeholderRoom" placeholder="مثلاً: sirius-42" autocomplete="off">
+        <label data-i18n="labelPin">رمز ۶ رقمی</label>
+        <input id="pinJ" class="pin" inputmode="numeric" maxlength="6" placeholder="••••••" autocomplete="off">
+        <button class="btn" id="joinGo" data-i18n="btnJoin">ورود به اتاق</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+    </div>
+
+    <!-- اتاق‌های اخیر (فقط در همین مرورگر) -->
+    <div class="card" id="recentCard" hidden>
+      <div class="recent-head">
+        <span data-i18n="recentTitle">🕘 اتاق‌های اخیر من</span>
+        <button id="clearRooms" class="ibtn" data-i18n="clearAll">🗑 پاک کردن همه</button>
+      </div>
+      <p class="recent-sub" data-i18n="recentSub">فقط روی همین دستگاه دیده می‌شود</p>
+      <div id="recentList"></div>
+    </div>
+  </div>
+
+  <!-- صفحه چت -->
+  <div id="chatBox" hidden>
+    <div class="card chatcard">
+      <div class="bar">
+        <span id="status">…</span>
+        <button class="tiny" id="leave" data-i18n="leaveBtn">خروج</button>
+      </div>
+      <div id="log"></div>
+      <div id="fileChip" hidden>
+        <span id="fileChipName"></span>
+        <button class="ibtn" id="fileChipCancel">✖</button>
+      </div>
+      <div class="send">
+        <button class="ibtn" id="attachBtn" title="📎">📎</button>
+        <input id="text" data-i18n-placeholder="inputPlaceholder" placeholder="پیامت را بنویس…" autocomplete="off">
+        <button class="btn" id="sendBtn" data-i18n="sendBtn">ارسال</button>
+      </div>
+      <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" hidden>
+    </div>
+  </div>
+
+  <p class="note" data-i18n="noteFooter">پیام‌ها، عکس‌ها و فایل‌ها در مرورگر با AES‑256‑GCM قفل می‌شوند؛ سرور فقط داده‌ی رمزشده را می‌بیند و هیچ‌چیزی ذخیره نمی‌کند.</p>
+</div>
+
+<!-- دکمه شناور دستیار هوش مصنوعی -->
+<button id="supportToggle" class="support-fab" title="🤖">💬</button>
+<div id="supportPanel" class="support-panel" hidden>
+  <div class="support-head">
+    <span>🤖 <span data-i18n="supportTitle">دستیار راهنما</span></span>
+    <button id="supportClose" class="ibtn">✖</button>
+  </div>
+  <div id="supportLog" class="support-log"></div>
+  <div class="support-send">
+    <input id="supportInput" data-i18n-placeholder="supportPlaceholder" placeholder="سوالت را بپرس…" autocomplete="off">
+    <button id="supportSend" class="ibtn">➤</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="/static/script.js"></script>
+</body>
+</html>
